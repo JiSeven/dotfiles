@@ -1,0 +1,5 @@
+require("options")
+require("mappings")
+require("config")
+require("plugins")
+require("lsp")
