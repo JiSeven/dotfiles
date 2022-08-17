@@ -27,7 +27,7 @@ local on_attach = function(client, bufnr)
             group = augroup,
             buffer = bufnr,
             callback = function()
-                vim.lsp.format({
+                vim.lsp.buf.format({
                     filter = function(client)
                         return client.name == "null-ls"
                     end

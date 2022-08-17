@@ -209,18 +209,14 @@ _G.packer_plugins = {
 }
 
 time([[Defining packer_plugins]], false)
--- Config for: nvim-cmp
-time([[Config for nvim-cmp]], true)
-require('plugins.cmp')
-time([[Config for nvim-cmp]], false)
 -- Config for: nvim-treesitter
 time([[Config for nvim-treesitter]], true)
 require('plugins.treesitter')
 time([[Config for nvim-treesitter]], false)
--- Config for: vim-mundo
-time([[Config for vim-mundo]], true)
-require('plugins.mundo')
-time([[Config for vim-mundo]], false)
+-- Config for: lualine.nvim
+time([[Config for lualine.nvim]], true)
+require('plugins.lualine')
+time([[Config for lualine.nvim]], false)
 -- Config for: nnn.nvim
 time([[Config for nnn.nvim]], true)
 require('plugins.nnn')
@@ -229,14 +225,18 @@ time([[Config for nnn.nvim]], false)
 time([[Config for fzf-lua]], true)
 require('plugins.fzf')
 time([[Config for fzf-lua]], false)
--- Config for: lualine.nvim
-time([[Config for lualine.nvim]], true)
-require('plugins.lualine')
-time([[Config for lualine.nvim]], false)
 -- Config for: nvim-snippy
 time([[Config for nvim-snippy]], true)
 require('plugins.snippy')
 time([[Config for nvim-snippy]], false)
+-- Config for: vim-mundo
+time([[Config for vim-mundo]], true)
+require('plugins.mundo')
+time([[Config for vim-mundo]], false)
+-- Config for: nvim-cmp
+time([[Config for nvim-cmp]], true)
+require('plugins.cmp')
+time([[Config for nvim-cmp]], false)
 if should_profile then save_profiles() end
 
 end)
