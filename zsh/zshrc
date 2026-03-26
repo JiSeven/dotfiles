@@ -1,0 +1,71 @@
+# =============================================================================
+# 1. CORE SETTINGS (Fast & Native)
+# =============================================================================
+# Initialize Starship
+eval "$(starship init zsh)"
+
+# Proper completion system (The heart of Zsh)
+autoload -Uz compinit && compinit
+zstyle ':completion:*' matcher-list 'm:{a-z0-9}={A-Z0-9}' # Case-insensitive completion
+zstyle ':completion:*' menu select                       # Visual menu for Tab
+zstyle ':completion:*' list-colors "${(s.:.)LS_COLORS}" # Colored completion (uses eza colors)
+
+# History settings (Clean & Sync)
+export HISTFILE="$ZDOTDIR/.zsh_history"
+export HISTSIZE=50000
+export SAVEHIST=50000
+setopt HIST_IGNORE_ALL_DUPS # Don't record same command twice
+setopt SHARE_HISTORY         # Share history between all WezTerm panes
+setopt HIST_REDUCE_BLANKS   # Remove superfluous blanks
+
+# =============================================================================
+# 2. PRODUCTIVITY HACKS (No Plugins Needed)
+# =============================================================================
+# Auto-cd: Just type the directory name to go there
+setopt AUTO_CD
+
+# Better globbing (e.g. ls **/*.py)
+setopt GLOB_DOTS
+setopt EXTENDED_GLOB
+
+# Edit command line in Neovim with CTRL-E
+autoload -Uz edit-command-line
+zle -N edit-command-line
+bindkey '^e' edit-command-line
+
+# =============================================================================
+# 3. ALIASES (The Workflow)
+# =============================================================================
+alias v="nvim"
+alias vi="nvim"
+alias n="nvim"
+
+# Navigation & Eza
+alias ls="eza --icons --group-directories-first"
+alias ll="eza -l --icons --git"
+alias la="eza -la --icons"
+alias tree="eza --tree --icons"
+
+# Git (Short & Sweet)
+alias g="git"
+alias gs="git status"
+alias ga="git add ."
+alias gc="git commit -m"
+alias gp="git push"
+alias gl="git log --oneline --graph --all"
+
+# Utilities
+alias cd..="cd .."
+alias ..="cd .."
+alias ...="cd ../.."
+alias h="history | fzf" # Search history with FZF
+alias reload="source $ZDOTDIR/.zsh_rc"
+
+# =============================================================================
+# 4. LIGHTWEIGHT PLUGINS (Manual Loading)
+# =============================================================================
+# If you want syntax highlighting and autosuggestions without a manager:
+# brew install zsh-syntax-highlighting zsh-autosuggestions
+source /opt/homebrew/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh 2>/dev/null
+source /opt/homebrew/share/zsh-autosuggestions/zsh-autosuggestions.zsh 2>/dev/null
+

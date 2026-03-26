@@ -1,0 +1,1 @@
+/Users/ishumilouski/dotfiles/zsh/zshrc
