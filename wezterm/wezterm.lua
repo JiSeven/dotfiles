@@ -49,19 +49,22 @@ config.use_fancy_tab_bar = false
 -- =============================================================================
 config.keys = {
   -- SPLITS (CMD + d)
-  { key = 'd',   mods = 'CMD',       action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }) },
-  { key = 'd',   mods = 'CMD|SHIFT', action = act.SplitVertical({ domain = 'CurrentPaneDomain' }) },
-  { key = 'w',   mods = 'CMD',       action = act.CloseCurrentPane({ confirm = true }) },
+  { key = 'd', mods = 'CMD',       action = act.SplitHorizontal({ domain = 'CurrentPaneDomain' }) },
+  { key = 'd', mods = 'CMD|SHIFT', action = act.SplitVertical({ domain = 'CurrentPaneDomain' }) },
+  { key = 'w', mods = 'CMD',       action = act.CloseCurrentPane({ confirm = true }) },
 
   -- PANE NAVIGATION (CMD + hjkl)
-  { key = 'h',   mods = 'CMD',       action = act.ActivatePaneDirection('Left') },
-  { key = 'j',   mods = 'CMD',       action = act.ActivatePaneDirection('Down') },
-  { key = 'k',   mods = 'CMD',       action = act.ActivatePaneDirection('Up') },
-  { key = 'l',   mods = 'CMD',       action = act.ActivatePaneDirection('Right') },
+  { key = 'h', mods = 'CMD',       action = act.ActivatePaneDirection('Left') },
+  { key = 'j', mods = 'CMD',       action = act.ActivatePaneDirection('Down') },
+  { key = 'k', mods = 'CMD',       action = act.ActivatePaneDirection('Up') },
+  { key = 'l', mods = 'CMD',       action = act.ActivatePaneDirection('Right') },
 
   -- WORKSPACES (Updated to Table flags)
-  { key = 's',   mods = 'CMD',       action = act.ShowLauncherArgs({ flags = 'WORKSPACES' }) },
-  { key = 'Tab', mods = 'CMD',       action = act.SwitchToWorkspace({ relative_to_current_view = true }) },
+  { key = 's', mods = 'CMD',       action = act.ShowLauncherArgs({ flags = 'WORKSPACES' }) },
+  -- Go back in the list of workspaces
+  { key = 'o', mods = 'CMD',       action = act.SwitchWorkspaceRelative(-1) },
+  -- Go forward in the list of workspaces
+  { key = 'i', mods = 'CMD',       action = act.SwitchWorkspaceRelative(1) },
   {
     key = 'n',
     mods = 'CMD',
