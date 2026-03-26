@@ -72,6 +72,18 @@ config.keys = {
       end),
     })
   },
+  {
+    key = 'r',
+    mods = 'CMD',
+    action = act.PromptInputLine {
+      description = "Rename current workspace:",
+      action = wezterm.action_callback(function(window, pane, line)
+        if line then
+          wezterm.mux.rename_workspace(wezterm.mux.get_active_workspace(), line)
+        end
+      end),
+    },
+  },
 
   -- RESIZING (CMD + CTRL + Arrows)
   { key = 'LeftArrow',  mods = 'CMD|CTRL',  action = act.AdjustPaneSize({ 'Left', 5 }) },
