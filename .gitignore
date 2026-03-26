@@ -1,0 +1,37 @@
+# --- System files ---
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# --- Zsh (Crucial: no history or sessions) ---
+zsh/.zsh_history
+zsh/.zsh_sessions/
+zsh/.zcompdump*
+.python_history
+
+# --- Neovim (No swap, undo or shada) ---
+nvim/.netrwhist
+nvim/undo/
+nvim/swap/
+nvim/backup/
+nvim/shada/
+# If you use lazy.nvim, don't sync the installed plugins
+nvim/lazy-lock.json
+nvim/lazy/
+
+# --- WezTerm ---
+wezterm/.DS_Store
+
+# --- Tool-specific (Bun, Node, etc.) ---
+.node_repl_history
+.npm/
+.bun/bin/
+
+# --- Local/Secret configs (The "Golden Rule") ---
+*.local.zsh
+*.local.lua
+.env
+.env.*
+
