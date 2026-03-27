@@ -1,5 +1,13 @@
 {
   "plugins": {
+    "SchemaStore.nvim": {
+      "rev": "25a82a141dc0caf3b9b82002a35caf3c9feab741",
+      "src": "https://github.com/b0o/SchemaStore.nvim"
+    },
+    "arctic.nvim": {
+      "rev": "46da33aeb3a8ee48533f41911b3aaf4f1541dd6f",
+      "src": "https://github.com/rockyzhang24/arctic.nvim"
+    },
     "dracula": {
       "rev": "ae752c13e95fb7c5f58da4b5123cb804ea7568ee",
       "src": "https://github.com/mofiqul/dracula.nvim"
@@ -12,6 +20,10 @@
       "rev": "34a564c81f36047f50e593c1656f4580ff75ccca",
       "src": "https://github.com/junegunn/fzf.vim"
     },
+    "github-nvim-theme": {
+      "rev": "c106c9472154d6b2c74b74565616b877ae8ed31d",
+      "src": "https://github.com/projekt0n/github-nvim-theme"
+    },
     "gitsigns.nvim": {
       "rev": "0a80125bace82d82847d40bc2c38a22d62c6dc2d",
       "src": "https://github.com/lewis6991/gitsigns.nvim"
@@ -23,6 +35,10 @@
     "lualine.nvim": {
       "rev": "47f91c416daef12db467145e16bed5bbfe00add8",
       "src": "https://github.com/nvim-lualine/lualine.nvim"
+    },
+    "lush.nvim": {
+      "rev": "9c60ec2279d62487d942ce095e49006af28eed6e",
+      "src": "https://github.com/rktjmp/lush.nvim"
     },
     "mason": {
       "rev": "44d1e90e1f66e077268191e3ee9d2ac97cc18e65",
@@ -40,6 +56,10 @@
       "rev": "b4796e09eb103f9f2d1e00aa2dab3753b879b17b",
       "src": "https://github.com/nvim-mini/mini.files"
     },
+    "mini.icons": {
+      "rev": "5b9076dae1bfbe47ba4a14bc8b967cde0ab5d77e",
+      "src": "https://github.com/nvim-mini/mini.icons"
+    },
     "mini.pairs": {
       "rev": "b7fde3719340946feb75017ef9d75edebdeb0566",
       "src": "https://github.com/nvim-mini/mini.pairs"
@@ -47,6 +67,10 @@
     "vim": {
       "rev": "84fbc42bdd11639157f358b65e01338d88c69be3",
       "src": "https://github.com/dracula/vim.git"
+    },
+    "vscode.nvim": {
+      "rev": "aa1102a7e15195c9cca22730b09224a7f7745ba8",
+      "src": "https://github.com/Mofiqul/vscode.nvim"
     }
   }
 }

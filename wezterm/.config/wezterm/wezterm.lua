@@ -22,7 +22,12 @@ config.window_padding = {
 -- =============================================================================
 config.color_scheme = 'Dracula'
 config.font = wezterm.font('JetBrainsMono Nerd Font', { weight = 'Medium' })
-config.font_size = 15.0
+config.font_size = 13.0
+config.font_shaper = 'Harfbuzz'
+config.freetype_interpreter_version = 40
+config.custom_block_glyphs = true
+config.bold_brightens_ansi_colors = "BrightAndBold"
+config.text_min_contrast_ratio = 4.5
 
 config.colors = {
   selection_fg = 'none',
