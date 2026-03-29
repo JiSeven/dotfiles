@@ -16,6 +16,9 @@ local plugins = {
 
 	-- Git
 	{ src = "https://github.com/lewis6991/gitsigns.nvim" },
+
+	{ src = "https://github.com/nvim-mini/mini.pairs" },
+	{ src = "https://github.com/nvim-mini/mini.surround" },
 }
 
 vim.pack.add(plugins)
@@ -97,3 +100,6 @@ require("gitsigns").setup({
 	},
 	current_line_blame_formatter = "   <author> • <author_time:%Y-%m-%d> • <summary>",
 })
+
+require("mini.pairs").setup({})
+require("mini.surround").setup({})

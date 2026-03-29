@@ -43,8 +43,13 @@ map("v", "K", ":m '<-2<CR>gv=gv")
 
 -- 8. LSP Diagnostics (Глобальные)
 map("n", "<leader>d", vim.diagnostic.open_float, { desc = "Line Diagnostics" })
-map("n", "[d", vim.diagnostic.goto_prev, { desc = "Prev Diagnostic" })
-map("n", "]d", vim.diagnostic.goto_next, { desc = "Next Diagnostic" })
+vim.keymap.set("n", "]d", function()
+	vim.diagnostic.jump({ count = 1, float = true })
+end, { desc = "Next Diagnostic" })
+
+vim.keymap.set("n", "[d", function()
+	vim.diagnostic.jump({ count = -1, float = true })
+end, { desc = "Prev Diagnostic" })
 
 -- Навигация по изменениям (Hunks)
 vim.keymap.set("n", "]c", function()
