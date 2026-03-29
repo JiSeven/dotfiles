@@ -1,69 +1,45 @@
+vim.g.mapleader = " "
+
 local opt = vim.opt
 
--- Appearance and navigation
-opt.number = true         -- Show line numbers
-opt.relativenumber = true -- Relative line numbers for easier jumping
-opt.cursorline = true     -- Highlight the line with the cursor
-opt.wrap = false          -- Disable line wrapping
-opt.scrolloff = 10        -- Keep 10 lines of context above/below cursor
-opt.sidescrolloff = 8     -- Keep 8 columns of context left/right of cursor
-opt.smoothscroll = true   -- Enable smooth scrolling (native in recent versions)
+-- 1. UI & Appearance
+opt.number = true         -- Show absolute line number
+opt.relativenumber = true -- Show relative line numbers for jumps
+opt.cursorline = true     -- Highlight the text line under the cursor
+opt.signcolumn = "yes"    -- Always show the sign column (prevent shifts)
+opt.scrolloff = 8         -- Minimal number of screen lines to keep above/below
+opt.guicursor = "a:block" -- Keep cursor as a block in all modes
+opt.pumheight = 10        -- Limit completion menu height
+opt.termguicolors = true  -- Enable 24-bit RGB color (standard for modern themes)
 
--- Indentation
-opt.tabstop = 2       -- Number of spaces a tab counts for
-opt.shiftwidth = 2    -- Size of an indent
-opt.expandtab = true  -- Use spaces instead of tabs
-opt.shiftround = true -- Round indent to multiple of shiftwidth
+-- 2. Behavior & Timings
+opt.timeoutlen = 300                        -- Time to wait for a mapped sequence to complete
+opt.updatetime = 300                        -- Faster completion and diagnostic popup response
+opt.undofile = true                         -- Save undo history to a file
+opt.formatoptions:remove({ "c", "r", "o" }) -- Stop auto-commenting on new lines
 
--- Search
+-- 3. Indentation & Tabs
+opt.tabstop = 4      -- Number of spaces that a <Tab> counts for
+opt.shiftwidth = 4   -- Number of spaces to use for each step of indent
+opt.expandtab = true -- Use spaces instead of tabs
+
+-- 4. Splits & Search
+opt.splitright = true -- Put new vertical splits to the right
+opt.splitbelow = true -- Put new horizontal splits below
+opt.hlsearch = false  -- Clear search highlights after executing search
 opt.ignorecase = true -- Ignore case in search patterns
-opt.smartcase = true  -- Case-sensitive if search contains uppercase
-opt.hlsearch = false  -- Do not keep search results highlighted
+opt.smartcase = true  -- Override 'ignorecase' if search contains capitals
 
--- Interface and System
-opt.signcolumn = "yes" -- Always show the sign column to prevent layout shifts
-opt.undofile = true    -- Persistent undo (Nvim handles directory automatically)
-opt.updatetime = 300   -- Delay before triggering CursorHold
-opt.timeoutlen = 300   -- Time to wait for a mapped sequence to complete
-opt.mouse = "a"        -- Enable mouse support
-opt.confirm = true     -- Confirm to save changes before exiting
+-- 5. Completion (Built-in Omnifunc)
+-- menuone: popup even for 1 match, noinsert: don't insert text until selection
+opt.completeopt = { "menu", "menuone", "noinsert" }
 
--- Editing behavior
-opt.virtualedit = "block"      -- Allow cursor to move past end of line in visual block mode
-opt.iskeyword:append("-")      -- Treat dash-separated words as a single word
-opt.formatoptions = "jcroqlnt" -- Smart auto-formatting of comments and text
-vim.opt.breakindent = true
+-- 6. Built-in File Navigation & Grep
+opt.path:append("**") -- Recursive search for :find
+opt.wildignore:append({ "**/node_modules/**", "**/.git/**", "**/dist/**", "*.pyc" })
 
--- Advanced display settings
-opt.list = true -- Show invisible characters (tabs, etc.)
-opt.fillchars = {
-  foldopen = " ",
-  foldclose = " ",
-  fold = " ",
-  foldsep = " ",
-  diff = "╱",
-  eob = " ", -- Hide the tildes (~) at the end of buffer
-}
-
-opt.foldmethod = "expr"
-opt.foldexpr = "v:lua.vim.treesitter.foldexpr()"
-opt.foldlevel = 99 -- Начинаем с открытыми фолдами
-
--- Native Filetype API
-vim.filetype.add({
-  extension = {
-    env = "dotenv",
-  },
-  filename = {
-    [".env"] = "dotenv",
-    ["env"] = "dotenv",
-  },
-  pattern = {
-    ["[jt]sconfig.*.json"] = "jsonc",
-    ["%.env%.[%w_.-]+"] = "dotenv",
-  },
-})
-
--- Better completion experience
-vim.opt.completeopt = { "menu", "menuone", "noselect", "noinsert" }
-vim.opt.pumheight = 10 -- Limit popup menu height
+-- Use Ripgrep for :grep if available
+if vim.fn.executable("rg") == 1 then
+    opt.grepprg = "rg --vimgrep --smart-case --no-heading"
+    opt.grepformat = "%f:%l:%c:%m"
+end

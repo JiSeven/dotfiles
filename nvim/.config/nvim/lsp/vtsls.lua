@@ -1,32 +1,13 @@
+-- Neovim 0.12 сам подцепит этот файл
 return {
-  cmd = { "vtsls", "--stdio" },
-  filetypes = {
-    "javascript", "javascriptreact", "javascript.jsx",
-    "typescript", "typescriptreact", "typescript.tsx"
-  },
+  cmd = { 'vtsls', '--stdio' },
+  filetypes = { 'javascript', 'javascriptreact', 'typescript', 'typescriptreact' },
+  root_markers = { 'package.json', 'tsconfig.json', 'jsconfig.json', '.git' },
   settings = {
+    -- Тут можно крутить настройки специфичные для TS
     typescript = {
       updateImportsOnFileMove = { enabled = "always" },
-      inlayHints = {
-        parameterNames = { enabled = "all" },
-        parameterTypes = { enabled = true },
-        variableTypes = { enabled = true },
-        propertyDeclarationTypes = { enabled = true },
-        functionLikeReturnTypes = { enabled = true },
-        enumMemberValues = { enabled = true },
-      },
-    },
-    javascript = {
-      updateImportsOnFileMove = { enabled = "always" },
-    },
-    vtsls = {
-      -- Автоматическое переименование при перемещении файлов в mini.files
-      autoUseWorkspaceTsdk = true,
-      experimental = {
-        completion = {
-          enableServerSideFuzzyMatch = true,
-        },
-      },
     },
   },
 }
+

@@ -1,93 +1,48 @@
 local map = vim.keymap.set
 
--- Disable Space in Normal/Visual mode to prevent cursor jumps
-map({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
+-- 1. Window Navigation
+map("n", "<C-h>", "<C-w>h")
+map("n", "<C-j>", "<C-w>j")
+map("n", "<C-k>", "<C-w>k")
+map("n", "<C-l>", "<C-w>l")
 
--- =============================================================================
--- SMART NAVIGATION (Neovim + WezTerm)
--- =============================================================================
+-- 2. Window & Buffer Management
+map("n", "<leader>v", ":vsplit<CR>")
+map("n", "<leader>s", ":split<CR>")
+map("n", "<leader>b", ":ls<CR>:b ", { desc = "Search open buffers" })
 
--- Seamlessly switch between Neovim splits and WezTerm panes
-map("n", "<C-h>", "<C-w>h", { desc = "Go to left window" })
-map("n", "<C-j>", "<C-w>j", { desc = "Go to lower window" })
-map("n", "<C-k>", "<C-w>k", { desc = "Go to upper window" })
-map("n", "<C-l>", "<C-w>l", { desc = "Go to right window" })
+-- Close buffer without breaking layout
+map("n", "<leader>q", "<cmd>bp|sp|bn|bd<cr>", { desc = "Close buffer keep split" })
 
--- =============================================================================
--- WINDOW & BUFFER MANAGEMENT
--- =============================================================================
+-- 3. Fast Escape
+map("i", "jk", "<Esc>")
+map("c", "jk", "<C-c>")
 
--- Splits
-map("n", "<leader>v", "<C-w>v", { desc = "Split vertical" })
-map("n", "<leader>s", "<C-w>s", { desc = "Split horizontal" })
-map("n", "<leader>x", "<C-w>c", { desc = "Close window" })
-map("n", "<leader>ww", "<C-w>p", { desc = "Jump to previous window" })
+-- 4. File & Folder Creation (Relative to current file)
+map("n", "<leader>n", ":e %:p:h/", { desc = "New file in current dir" })
+map("n", "<leader>N", ":silent !mkdir -p %:p:h/", { desc = "New folder in current dir" })
 
--- Resizing (Ctrl + Shift + Arrows)
-map("n", "<C-S-Up>", "<cmd>resize +2<CR>", { desc = "Increase height" })
-map("n", "<C-S-Down>", "<cmd>resize -2<CR>", { desc = "Decrease height" })
-map("n", "<C-S-Left>", "<cmd>vertical resize -2<CR>", { desc = "Decrease width" })
-map("n", "<C-S-Right>", "<cmd>vertical resize +2<CR>", { desc = "Increase width" })
+-- 5. LSP Diagnostics (Modern API 0.11+)
+map('n', '<leader>e', vim.diagnostic.open_float, { desc = "Line Diagnostic" })
+map('n', '<leader>xx', vim.diagnostic.setqflist, { desc = "Project Diagnostics" })
 
--- Buffers
-map("n", "<Tab>", "<cmd>bnext<cr>", { desc = "Next buffer" })
-map("n", "<S-Tab>", "<cmd>bprevious<cr>", { desc = "Prev buffer" })
-map("n", "<leader>`", "<cmd>e #<cr>", { desc = "Last buffer" })
-map("n", "<leader>bd", "<cmd>bdelete<cr>", { desc = "Delete buffer" })
+-- 6. Search & Replace (Quickfix Way)
+map("n", "<leader>gw", ":silent grep! <cword><CR>:copen<CR>", { desc = "Grep word under cursor" })
+map("n", "<leader>gg", ":grep! ", { desc = "Manual grep search" })
 
--- =============================================================================
--- SEARCH & QUICKFIX
--- =============================================================================
+-- Advanced replace: Pre-fills search term and places cursor for replacement
+map("n", "<leader>gr",
+    [[:cfdo %s/<C-r>///gc | update<Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left><Left>]],
+    { desc = "Project replace" })
 
-map("n", "<Esc>", "<cmd>noh<cr>", { desc = "Clear search highlight" })
+-- 7. Git Integration
+map('n', '<leader>gd', ':vertical diffsplit !git show HEAD:%<CR>', { desc = "Git Diff Split" })
 
--- Fzf-lua shortcuts
-map("n", "<c-p>", "<cmd>FzfLua files<cr>", { desc = "Find files" })
-map("n", "<leader>/", "<cmd>FzfLua live_grep<cr>", { desc = "Grep project" })
-map("n", "<leader>,", "<cmd>FzfLua buffers<cr>", { desc = "Switch buffers" })
-map("n", "<leader>fr", "<cmd>FzfLua resume<cr>", { desc = "Resume search" })
-
--- Quickfix toggle & navigation
-map("n", "[q", "<cmd>cprev<cr>", { desc = "Prev Quickfix" })
-map("n", "]q", "<cmd>cnext<cr>", { desc = "Next Quickfix" })
-map("n", "<leader>q", function()
-  local qf_exists = false
-  for _, win in pairs(vim.fn.getwininfo()) do
-    if win.quickfix == 1 then qf_exists = true end
-  end
-  if qf_exists then vim.cmd("cclose") else vim.cmd("copen") end
-end, { desc = "Toggle Quickfix" })
-
--- =============================================================================
--- SNIPPETS & COMPLETION (Native 0.12)
--- =============================================================================
-
--- Snippet placeholder navigation
-map({ "i", "s" }, "<C-l>", function()
-  return vim.snippet.active({ direction = 1 }) and vim.snippet.jump(1) or "<C-l>"
-end, { expr = true, desc = "Next snippet placeholder" })
-
-map({ "i", "s" }, "<C-h>", function()
-  return vim.snippet.active({ direction = -1 }) and vim.snippet.jump(-1) or "<C-h>"
-end, { expr = true, desc = "Prev snippet placeholder" })
-
--- Native PUM (Popup Menu) navigation
-map("i", "<Tab>", function() return vim.fn.pumvisible() == 1 and "<C-n>" or "<Tab>" end, { expr = true })
-map("i", "<S-Tab>", function() return vim.fn.pumvisible() == 1 and "<C-p>" or "<S-Tab>" end, { expr = true })
-map("i", "<CR>", function() return vim.fn.pumvisible() == 1 and "<C-y>" or "<CR>" end, { expr = true })
-
--- =============================================================================
--- UTILS & EXPLORER
--- =============================================================================
-
-map("n", "<leader>z", "zMzvzz", { desc = "Focus current fold" })
-map("n", "<leader><Tab>", "za", { desc = "Toggle fold" })
-map("n", "<leader>w", "<cmd>setlocal wrap!<CR>", { desc = "Toggle wrap" })
-map("n", "z=", "1z=", { desc = "Auto-fix spelling" })
-
-map("n", "-", function()
-  local mini_files = require("mini.files")
-  if not mini_files.close() then
-    mini_files.open(vim.api.nvim_buf_get_name(0))
-  end
-end, { desc = "Toggle File Explorer" })
+-- 8. Smart Tab Completion (LSP Omnifunc)
+map('i', '<Tab>', function()
+    local col = vim.fn.col('.') - 1
+    if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
+        return vim.api.nvim_replace_termcodes('<Tab>', true, true, true)
+    end
+    return vim.api.nvim_replace_termcodes('<C-x><C-o>', true, true, true)
+end, { expr = true, replace_keycodes = false })

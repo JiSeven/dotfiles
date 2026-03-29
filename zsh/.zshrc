@@ -1,72 +1,64 @@
-# 1. Colors & Environment
-# Ensure 24-bit color support for WezTerm and Neovim 0.12
+# 1. Environment & Paths
 export COLORTERM=truecolor
 export TERM=xterm-256color
+export EDITOR='nvim'
 
-# 2. History Settings
-HISTFILE="$HOME/.zsh_history"
+# 2. History (Сгруппировано в одном месте)
+HISTFILE="$HOME/.config/zsh/.zsh_history"
+mkdir -p "$(dirname "$HISTFILE")" # Создаем папку, если её нет
 HISTSIZE=10000
 SAVEHIST=10000
-setopt APPEND_HISTORY       # Append to history file instead of overwriting
-setopt SHARE_HISTORY        # Share history between different terminal sessions
-setopt HIST_IGNORE_DUPS     # Don't record a line if it was the previous one
+setopt APPEND_HISTORY SHARE_HISTORY HIST_IGNORE_DUPS HIST_IGNORE_ALL_DUPS HIST_REDUCE_BLANKS
 
-# 3. Navigation & Completion
-setopt AUTO_CD              # Just type the directory name to 'cd' into it
-setopt MENU_COMPLETE        # Highlight the first completion in the menu
-zstyle ':completion:*' menu select # Use arrow keys to navigate completions
+# 3. Completion & Navigation
+setopt AUTO_CD
+zstyle ':completion:*' menu select
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}' # Регистронезависимый поиск
 
-# 4. Aliases (Fast workflow)
-alias v='nvim'
-alias vi='nvim'
-alias vim='nvim'
-alias ls='ls -G'            # Colored output for macOS ls
-alias ll='ls -alF'
-alias g='git'
-alias dot='cd ~/dotfiles'   # Quick access to your config
-
-# 5. Plugins (Manual loading for speed)
-# Use 'brew --prefix' to find the correct path on Apple Silicon or Intel
-if [ -f $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh ]; then
-    source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+# 4. FZF & Navigation (Инженерный блок)
+if command -v fzf &> /dev/null; then
+    source <(fzf --zsh) # Официальный способ инициализации
+    
+    # Чтобы fzf не тормозил на тяжелых папках (node_modules, .git)
+    export FZF_DEFAULT_COMMAND='fd --type f --strip-cwd-prefix --hidden --exclude .git'
+    export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+    export FZF_ALT_C_COMMAND='fd --type d --hidden --exclude .git'
+    
+    # Красивое превью для папок через eza (Alt+C)
+    export FZF_ALT_C_OPTS="--preview 'eza -T -L 2 --icons --color=always {} | head -20'"
+    
+    # Фикс твоего cdf (теперь он реально работает)
+    fcd() {
+      local dir=$(fd --type d --hidden --exclude .git | fzf --preview 'eza -T -L 2 --icons --color=always {}')
+      [ -n "$dir" ] && cd "$dir"
+    }
+    alias cdf='fcd'
 fi
 
-if [ -f $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh ]; then
-    source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
+# Zoxide (умный cd) — мастхэв для Mac
+command -v zoxide &> /dev/null && eval "$(zoxide init zsh)"
 
-# 6. Prompt (Starship)
-# Must be at the very end to properly override the prompt
-if command -v starship &> /dev/null; then
-    eval "$(starship init zsh)"
-fi
-
-# --- CLEAN HOME DIRECTORY ---
-
-# Move Zsh history to .config/zsh/
-# This keeps your $HOME clean
-HISTFILE="$HOME/.config/zsh/.zsh_history"
-
-# --- FILE EXPLORER (EZA) ---
-
-# Check if eza is installed before setting aliases
+# 5. Aliases (EZA & Tools)
 if command -v eza &> /dev/null; then
-    # Base alias for 'ls'
-    # --icons: show filetype icons (requires Nerd Font)
-    # --group-directories-first: keep folders at the top
-    # --color=always: force colors for better contrast
-    alias ls='eza --icons --group-directories-first --color=always'
-    
-    # Detailed list (replaces 'll')
-    # -l: long format (permissions, size, date)
-    # -a: show hidden files (dotfiles)
-    # -h: human-readable file sizes
-    alias ll='eza -lah --icons --group-directories-first'
-    
-    # Tree view (very handy for project structure)
+    alias ls='eza -1 --icons --group-directories-first'
+    alias ll='eza -lha --icons --group-directories-first --git' # Добавил статус гита
     alias lt='eza --tree --level=2 --icons'
+    # Превью файла в fzf через eza
+    alias fe='fzf --preview "eza -ld --color=always --icons {}"'
 else
-    # Fallback to standard ls if eza is missing
     alias ls='ls -G'
     alias ll='ls -alF'
 fi
+
+alias vi='nvim'
+alias g='git'
+alias dot='cd ~/dotfiles'
+
+# 6. Plugins (Загружаем один раз через Brew пути)
+BREW_PREFIX=$(brew --prefix)
+[ -f "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ] && source "$BREW_PREFIX/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+[ -f "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh" ] && source "$BREW_PREFIX/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh"
+
+# 7. Prompt (Starship в самом конце)
+command -v starship &> /dev/null && eval "$(starship init zsh)"
+

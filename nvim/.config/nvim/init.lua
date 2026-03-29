@@ -1,17 +1,17 @@
--- 1. Setup Leader (Must be very first)
-vim.g.mapleader = " "
-vim.g.maplocalleader = " "
-
--- 2. Declarative Packages (Nvim 0.12 native way)
+-- Plugin management (Native package system)
 vim.pack.add({
-  { src = "https://github.com/nvim-mini/mini.pairs" },
-  { src = "https://github.com/nvim-mini/mini.files" },
-  { src = "https://github.com/ibhagwan/fzf-lua" },
-  { src = "https://github.com/mofiqul/dracula.nvim",     name = "dracula" },
-  { src = "https://github.com/nvim-lualine/lualine.nvim" },
-  { src = "https://github.com/lewis6991/gitsigns.nvim" },
+    { src = "https://github.com/folke/tokyonight.nvim" },
+    { src = "https://github.com/nvim-lualine/lualine.nvim" },
+    { src = "https://github.com/nvim-tree/nvim-web-devicons" },
+    { src = "https://github.com/lewis6991/gitsigns.nvim" },
 })
-
--- 3. Load core configurations
+-- Core modules loading
 require("core.options")
 require("core.keymaps")
+require("core.lsp")
+require("core.theme")
+require("modules.netrw")
+require("modules.fzf")
+require("modules.statusline")
+require("modules.git")
+require("autocmds")
